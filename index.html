@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ramówka - Kostkowe Radio</title>
+  <link rel="stylesheet" href="../style.css?v=2" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="../icon.png" type="image/png" />
+  <style>
+    main {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+      font-family: 'Poppins', Arial, sans-serif;
+    }
+    h2 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .program {
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+    .program h3 {
+      margin: 0 0 10px 0;
+      font-weight: 600;
+    }
+    .progress-bar {
+      background: #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 20px;
+      margin-top: 10px;
+      position: relative;
+    }
+    .progress-fill {
+      background: #e91e63;
+      height: 100%;
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+    .time-remaining {
+      position: absolute;
+      right: 10px;
+      top: 0;
+      bottom: 0;
+      color: white;
+      font-weight: bold;
+      font-size: 0.9rem;
+      line-height: 20px;
+      user-select: none;
+      text-shadow: 1px 1px 2px #000;
+    }
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 40px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #e91e63;
+      padding-bottom: 5px;
+    }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  font-family: Arial, sans-serif;
+  background: #fff;
+  color: #000;
+}
+
+.hero {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-image: url('https://kostkoweradio.github.io/strona-glowna/0yg11h.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  padding-left: 5%;
+  color: white;
+  text-shadow: 2px 2px 8px #000;
+}
+
+.text-box {
+  max-width: 600px;
+}
+
+.text-box h1 {
+  font-size: 3em;
+  margin-bottom: 0.3em;
+}
+
+.text-box h2 {
+  font-size: 2em;
+  margin-bottom: 0.3em;
+}
+
+.text-box p {
+  font-size: 1.3em;
+}
+
+.opis {
+  padding: 3em 5%;
+  background: #f0f0f0;
+}
+
+.opis h2 {
+  font-size: 2em;
+  margin-bottom: 0.5em;
+}
+
+.opis p {
+  font-size: 1.2em;
+  line-height: 1.6;
+}
+
+/* Sekcja podcasty */
+.podcasty {
+  max-width: 900px;
+  margin: 40px auto 60px auto;
+  padding: 0 20px;
+}
+
+.podcasty h2 {
+  font-size: 2rem;
+  margin-bottom: 1em;
+  text-align: center;
+}
+
+.podcast-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.podcast {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+.podcast h3 {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  font-size: 1.3rem;
+}
+
+.podcast p {
+  margin: 0 0 1em 0;
+  font-size: 1rem;
+}
+
+.podcast a {
+  color: #007acc;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.podcast a:hover {
+  text-decoration: underline;
+}
+
+/* Opcjonalnie responsywność */
+@media (max-width: 600px) {
+  .podcasty {
+    padding: 0 10px;
+  }
+
+  .podcast h3 {
+    font-size: 1.1rem;
+  }
+
+  .podcast p {
+    font-size: 0.9rem;
+  }
+}
+
+.radio-na-zywo h2 {
+  text-decoration: none; /* upewniamy się, że to nie jest link */
+  cursor: default;       /* zwykły kursor, nie wskazujący na link */
+  margin-bottom: 20px;
+  pointer-events: none !important;
+  user-select: text; /* żeby można było zaznaczać tekst normalnie */
+}
+
+/* Nowy styl przycisku "Radio na żywo" */
+.btn-radio {
+  background: linear-gradient(45deg, #ff4081, #e91e63);
+  color: white;
+  padding: 18px 50px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(233, 30, 99, 0.6);
+  transition: background 0.4s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  user-select: none;
+}
+
+.btn-radio:hover {
+  background: linear-gradient(45deg, #e91e63, #c2185b);
+  box-shadow: 0 8px 20px rgba(194, 24, 91, 0.8);
+  transform: scale(1.05);
+}
+
+.btn-radio:active {
+  transform: scale(0.97);
+  box-shadow: 0 4px 12px rgba(194, 24, 91, 0.7);
+}
+
+/* MENU GÓRNE */
+.main-menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 5%;
+  background-color: #222;
+  color: white;
+  font-family: 'Poppins', Arial, sans-serif;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 60px; /* wysokość półpaska */
+}
+
+.menu-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.menu-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.menu-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.menu-right {
+  display: flex;
+  gap: 25px;
+}
+
+.menu-link {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+}
+
+.menu-link:hover {
+  color: #e91e63;
+  text-decoration: underline;
+}
+
+/* Responsywność na małe ekrany */
+@media (max-width: 600px) {
+  .main-menu {
+    flex-direction: column;
+    gap: 10px;
+    height: auto;
+  }
+  .menu-right {
+    gap: 15px;
+  }
+}
+  </style>
+</head>
+<body>
+
+  <header class="main-menu">
+    <div class="menu-left">
+      <img src="../icon.png" alt="Logo Kostkowe Radio" class="menu-logo" />
+      <span class="menu-title">Kostkowe Radio</span>
+    </div>
+    <nav class="menu-right">
+      <a href="../wiadomosci/index.html" class="menu-link">Wiadomości</a>
+      <a href="../ramowka/index.html" class="menu-link">Ramówka</a>
+      <a href="../informacje/index.html" class="menu-link">Informacje</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Aktualny program</h2>
+    <section id="current-program" class="program">
+      <h3 id="current-title">Ładowanie...</h3>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+        <div class="time-remaining" id="time-remaining"></div>
+      </div>
+    </section>
+
+    <h2 class="section-title">Nadchodzące programy</h2>
+    <section id="upcoming-programs"></section>
+
+    <h2 class="section-title">Minione programy</h2>
+    <section id="past-programs"></section>
+  </main>
+
+  <script>
+    // Programy według godzin [start, end, tytuł]
+    // Godziny w formacie "HH:mm"
+    const schedule = [
+      {start: "00:00", end: "05:00", title: "Nocka z Kostkowym Radiem"},
+      {start: "05:00", end: "09:00", title: "Dobry dzień w Kostkowym Radiu"},
+      {start: "09:00", end: "15:00", title: "Luźny dzień z Kostkowym Radiem"},
+      {start: "15:00", end: "16:00", title: "Brak Programu"},
+      {start: "16:00", end: "20:00", title: "Halucynacje w Kostkowym Radiu"},
+      {start: "20:00", end: "24:00", title: "Brak Programu"}
+    ];
+
+    // Funkcja pomocnicza do parsowania "HH:mm" na Date dzisiejszy
+    function parseTime(timeStr) {
+      const [h,m] = timeStr.split(":").map(Number);
+      const now = new Date();
+      now.setHours(h, m, 0, 0);
+      return now;
+    }
+
+    // Funkcja do sprawdzania, czy aktualny czas jest między start i end (uwzględnia przekroczenie północy)
+    function isCurrentBetween(start, end, now) {
+      if(end.getTime() <= start.getTime()) {
+        // Przekroczenie północy, np. 20:00-00:00
+        return now >= start || now < end;
+      } else {
+        return now >= start && now < end;
+      }
+    }
+
+    function formatDuration(ms) {
+      const totalSeconds = Math.floor(ms / 1000);
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      return `${minutes}m ${seconds}s`;
+    }
+
+    function updateSchedule() {
+      const now = new Date();
+
+      let currentProgram = null;
+      let currentStart = null;
+      let currentEnd = null;
+
+      // Znajdź aktualny program
+      for(const prog of schedule) {
+        let start = parseTime(prog.start);
+        let end = parseTime(prog.end);
+        // jeśli end < start, to end przesuwamy na następny dzień
+        if(end <= start) end = new Date(end.getTime() + 24*60*60*1000);
+
+        // teraz sprawdzamy czy now jest między start i end
+        if(isCurrentBetween(start, end, now)) {
+          currentProgram = prog;
+          currentStart = start;
+          currentEnd = end;
+          break;
+        }
+      }
+
+      // Aktualizuj aktualny program
+      if(currentProgram) {
+        document.getElementById('current-title').textContent = currentProgram.title;
+
+        // Oblicz pasek postępu i czas pozostały
+        const elapsed = now - currentStart;
+        const duration = currentEnd - currentStart;
+        const progressPercent = Math.min(100, Math.max(0, (elapsed / duration) * 100));
+        const remainingMs = currentEnd - now;
+        document.getElementById('progress-fill').style.width = progressPercent + '%';
+        document.getElementById('time-remaining').textContent = `Zostało: ${formatDuration(remainingMs)}`;
+      } else {
+        document.getElementById('current-title').textContent = "Brak danych o aktualnym programie";
+        document.getElementById('progress-fill').style.width = '0%';
+        document.getElementById('time-remaining').textContent = '';
+      }
+
+      // Nadchodzące programy - te których start jest po teraz
+      const upcoming = schedule.filter(prog => {
+        let start = parseTime(prog.start);
+        if(start <= now) start = new Date(start.getTime() + 24*60*60*1000);
+        return start > now;
+      });
+
+      const upcomingContainer = document.getElementById('upcoming-programs');
+      upcomingContainer.innerHTML = '';
+      for(const prog of upcoming) {
+        const el = document.createElement('div');
+        el.classList.add('program');
+        el.innerHTML = `
+          <h3>${prog.title}</h3>
+          <p>${prog.start} - ${prog.end}</p>
+        `;
+        upcomingContainer.appendChild(el);
+      }
+
+      // Minione programy - te których end jest przed teraz
+      const past = schedule.filter(prog => {
+        let end = parseTime(prog.end);
+        if(end <= parseTime(prog.start)) end = new Date(end.getTime() + 24*60*60*1000);
+        return end <= now;
+      });
+
+      const pastContainer = document.getElementById('past-programs');
+      pastContainer.innerHTML = '';
+      for(const prog of past) {
+        const el = document.createElement('div');
+        el.classList.add('program');
+        el.innerHTML = `
+          <h3>${prog.title}</h3>
+          <p>${prog.start} - ${prog.end}</p>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 100%;"></div>
+          </div>
+        `;
+        pastContainer.appendChild(el);
+      }
+    }
+
+    // Aktualizuj co sekundę, żeby pasek i czas się odświeżały
+    updateSchedule();
+    setInterval(updateSchedule, 1000);
+  </script>
+
+</body>
+</html>
